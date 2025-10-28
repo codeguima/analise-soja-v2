@@ -7,8 +7,6 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white flex flex-col items-center">
@@ -19,7 +17,7 @@
       🌾 CSV Data Analyzer
     </h1>
     <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
-      Faça upload de um CSV, treine um modelo e visualize previsões e gráficos agrícolas interativos.
+      Faça upload de um CSV, treine o modelo e visualize gráficos agrícolas interativos.
     </p>
   </header>
 
@@ -27,40 +25,35 @@
   <section class="bg-gray-900/70 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-2xl text-center border border-gray-800 hover:border-cyan-500/50 transition">
     <h2 class="text-2xl font-semibold mb-6">Importar Dados</h2>
 
-    <input id="csvfile" type="file" accept=".csv" class="text-gray-300 mb-4" />
+    <input id="file" type="file" accept=".csv" class="text-gray-300 mb-4" />
     <button id="uploadBtn" class="w-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">
       📤 Enviar CSV
     </button>
     <p id="uploadStatus" class="text-gray-400 mt-4"></p>
   </section>
 
-  <!-- ACTIONS -->
-  <section class="mt-10 flex gap-4">
-    <button id="analyzeBtn" class="px-6 py-3 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition">
-      📊 Analisar
-    </button>
-    <button id="trainBtn" class="px-6 py-3 bg-green-600 rounded-lg font-semibold hover:bg-green-700 transition">
-      🤖 Treinar Modelo
-    </button>
-  </section>
-
-  <!-- PREDICT -->
+  <!-- TRAIN -->
   <section class="mt-10 bg-gray-900/70 p-6 rounded-xl border border-gray-800 w-full max-w-2xl text-center">
-    <h3 class="text-xl font-semibold mb-3 text-cyan-400">📈 Fazer Previsão</h3>
-    <form id="predictForm" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <input name="crop" placeholder="Cultura" class="input" />
-      <input name="year" placeholder="Ano" class="input" />
-      <input name="season" placeholder="Estação" class="input" />
-      <input name="area" placeholder="Área (ha)" class="input" />
-      <input name="production" placeholder="Produção (t)" class="input" />
-      <input name="rain_mm" placeholder="Chuva (mm)" class="input" />
-      <input name="fertilizer_kg_ha" placeholder="Fertilizante (kg/ha)" class="input" />
-      <input name="pesticide_kg_ha" placeholder="Pesticida (kg/ha)" class="input" />
-    </form>
-    <button id="predictBtn" class="mt-4 w-full bg-gradient-to-r from-purple-500 to-indigo-600 py-3 rounded-lg font-semibold hover:opacity-90 transition">
-      ⚙️ Calcular Previsão
-    </button>
-    <p id="predictResult" class="text-cyan-400 mt-4"></p>
+    <h3 class="text-xl font-semibold mb-3 text-cyan-400">⚙️ Treinar Modelo</h3>
+
+    <div class="flex flex-col md:flex-row justify-center gap-4 mb-4">
+      <input id="target" placeholder="Coluna alvo (ex: yield_kg_ha)" class="p-2 rounded bg-gray-800 text-white w-full md:w-1/2" value="yield_kg_ha" />
+      <select id="model" class="p-2 rounded bg-gray-800 text-white w-full md:w-1/3">
+        <option value="random_forest">Random Forest</option>
+        <option value="linear">Linear Regression</option>
+      </select>
+    </div>
+
+    <div class="flex gap-4 justify-center">
+      <button id="trainBtn" class="px-6 py-3 bg-green-600 rounded-lg font-semibold hover:bg-green-700 transition">
+        🚀 Treinar
+      </button>
+      <button id="retrainBtn" class="px-6 py-3 bg-yellow-600 rounded-lg font-semibold hover:bg-yellow-700 transition">
+        🔁 Re-treinar
+      </button>
+    </div>
+
+    <pre id="trainout" class="bg-gray-800 mt-6 p-4 rounded text-left text-sm overflow-x-auto"></pre>
   </section>
 
   <!-- DASHBOARD -->
@@ -69,11 +62,11 @@
       Resultados da Análise
     </h2>
     <div id="summary" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"></div>
-    <div id="figures" class="space-y-10"></div>
+    <div id="charts" class="space-y-10"></div>
   </section>
 
   <footer class="mt-20 py-6 text-gray-500 text-sm border-t border-gray-800 w-full text-center">
-    © 2025 CSV Analyzer — Feito com 💙 e dados.
+    © 2025 CSV Analyzer.
   </footer>
 
   <script src="/static/js/dashboard.js"></script>
